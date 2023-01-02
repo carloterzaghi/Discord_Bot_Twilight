@@ -7,6 +7,13 @@ bot = commands.Bot(command_prefix='!', intents= discord.Intents.all(), help_comm
 
 @bot.event
 async def on_ready():
+    await bot.change_presence(
+        status=discord.Status.idle, 
+        activity= discord.Streaming(
+            name= "Happy 2023!", 
+            url= "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+            )
+        )
     print(f"{bot.user.name} está online!")
 
 async def load_cogs():
