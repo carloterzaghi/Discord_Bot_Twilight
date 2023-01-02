@@ -1,11 +1,39 @@
 import discord
 from discord.ext import commands
 from discord import app_commands, ButtonStyle
-from discord.ui import Button, View
+from discord.ui import Button, View, Select
+
+# View class to select the language
+class SelectLanguage(discord.ui.Select):
+    def __init__(self):
+
+        options = [
+            discord.SelectOption(label="English", description="English language."),
+            discord.SelectOption(label="Português", description="Lingua Portuguesa.")
+        ]
+
+        super().__init__(placeholder='Select a language...', min_values=1, max_values=1, options=options)
+
+    async def callback(self, interaction: discord.Interaction):
+        view = View()
+        await interaction.response.send_message(f'You select {self.values[0]}',view=view)
+
+
+class SelectLanguageView(discord.ui.View):
+    def __init__(self):
+        super().__init__()
+
+        # Adds the dropdown to our view object.
+        self.add_item(SelectLanguage())
 
 class codeNames(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+
+    # @commands.command()
+    # async def o(self,ctx):
+    #     view = SelectLanguageView()
+    #     await ctx.send('Pick your favourite colour:', view=view)
 
     # Comando slash play
     @app_commands.command(name='play',description="Start a new game")
@@ -135,7 +163,7 @@ class codeNames(commands.Cog):
 
             if len(blue)==(len(OperativeBlue)+len(SpyMasterBlue)) and len(red)==(len(OperativeRed)+len(SpyMasterRed)):
                 ready = Button(label= 'Ready', style= ButtonStyle.green)
-                ready.callback = game
+                ready.callback = game_language
                 proview.add_item(ready)
 
             await interaction.response.edit_message(embed = embed,view = proview)
@@ -180,13 +208,13 @@ class codeNames(commands.Cog):
                     SpyMasterRed.append(interaction.user.mention)
             await ready_push(interaction)
 
-        # Push do Ready dos times
-        async def game(interaction : discord.Interaction):
+        # Push do select language of the game
+        async def game_language(interaction : discord.Interaction):
             embed = discord.Embed(
-                title = 'Fim de Jogo',
-                color = 0x97CBFF
+                title = "__CodeNames__",
+                description= "Before starting the game, please choose a language."
                 )   
-            proview = View(timeout=240)
+            proview = SelectLanguageView()
             await interaction.response.edit_message(embed = embed,view = proview)
 
 
@@ -216,3 +244,6 @@ class codeNames(commands.Cog):
 
 async def setup(bot):
     await bot.add_cog(codeNames(bot))
+
+# words_br = open("./venv/dictionares/br.txt", encoding="utf8")
+# print(words_br.read())
