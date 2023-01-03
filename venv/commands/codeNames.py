@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from discord import app_commands, ButtonStyle
 from discord.ui import Button, View, Select
+import random
 
 # View class to select the language
 class SelectLanguage(discord.ui.Select):
@@ -16,7 +17,35 @@ class SelectLanguage(discord.ui.Select):
 
     async def callback(self, interaction: discord.Interaction):
         view = View()
-        await interaction.response.send_message(f'You select {self.values[0]}',view=view)
+        if self.values[0] == 'Português':
+            lingua = "br.txt"
+        if self.values[0] == 'English':
+            lingua = "en.txt"
+        list_words = []
+        selected_words = []
+        words_ = open(f"./venv/dictionares/{lingua}", encoding="utf8")
+        for i in words_:
+            list_words.append((i[:-1] if i[-1:] == '\n' else i).capitalize())
+        random_word = random.choice(list_words)
+        while len(selected_words) != 25:
+            if random_word not in selected_words:
+                selected_words.append(random_word) 
+            else:
+                random_word = random.choice(list_words)
+        n = 0
+        text = ''
+        for i in selected_words:
+            n+=1
+            if n == 5:
+                n = 0
+                text += f'{i}\n'
+            else:
+                text += f'{i} '
+        embed = discord.Embed(
+                title = "__CodeNames__",
+                description= text
+            )
+        await interaction.response.edit_message(embed=embed, view= view)
 
 
 class SelectLanguageView(discord.ui.View):
@@ -33,7 +62,7 @@ class codeNames(commands.Cog):
     # @commands.command()
     # async def o(self,ctx):
     #     view = SelectLanguageView()
-    #     await ctx.send('Pick your favourite colour:', view=view)
+    #     await ctx.send('Teste:', view=view)
 
     # Comando slash play
     @app_commands.command(name='play',description="Start a new game")
@@ -244,6 +273,3 @@ class codeNames(commands.Cog):
 
 async def setup(bot):
     await bot.add_cog(codeNames(bot))
-
-# words_br = open("./venv/dictionares/br.txt", encoding="utf8")
-# print(words_br.read())
