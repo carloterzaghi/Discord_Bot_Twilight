@@ -13,7 +13,6 @@ Braço
 Atlântida
 Austrália
 asteca
-De volta
 Bola
 Banda
 Banco
@@ -106,7 +105,7 @@ Dinossauro
 Doença
 Falsificar
 Cão
-Esboço, projeto
+Esboço
 Dragão
 Vestir
 Furar
@@ -275,6 +274,7 @@ Jogar
 Trama
 Apontar
 Veneno
+Projeto
 Pólo
 Polícia
 Piscina
