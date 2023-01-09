@@ -3,6 +3,7 @@ from discord.ext import commands
 from discord import app_commands, ButtonStyle
 from discord.ui import Button, View, Select
 import random
+from auxiliary_functions.imageGenaratorCodeNames import generatorImageGame
 
 # View class to select the language
 class SelectLanguage(discord.ui.Select):
@@ -21,29 +22,9 @@ class SelectLanguage(discord.ui.Select):
             lingua = "br.txt"
         if self.values[0] == 'English':
             lingua = "en.txt"
-        list_words = []
-        selected_words = []
-        words_ = open(f"./venv/dictionares/{lingua}", encoding="utf8")
-        for i in words_:
-            list_words.append((i[:-1] if i[-1:] == '\n' else i).capitalize())
-        random_word = random.choice(list_words)
-        while len(selected_words) != 25:
-            if random_word not in selected_words:
-                selected_words.append(random_word) 
-            else:
-                random_word = random.choice(list_words)
-        n = 0
-        text = ''
-        for i in selected_words:
-            n+=1
-            if n == 5:
-                n = 0
-                text += f'{i}\n'
-            else:
-                text += f'{i} '
         embed = discord.Embed(
                 title = "__CodeNames__",
-                description= text
+                description= "```" + generatorImageGame(lingua) + "```"
             )
         await interaction.response.edit_message(embed=embed, view= view)
 
