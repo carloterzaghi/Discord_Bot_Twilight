@@ -10,7 +10,7 @@ async def on_ready():
     await bot.change_presence(
         status=discord.Status.idle, 
         activity= discord.Streaming(
-            name= "Happy 2023!", 
+            name= "Something...", 
             url= "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
             )
         )
